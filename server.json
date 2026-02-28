@@ -1,0 +1,20 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "eu.ansvar/comprehensive-eu-law-mcp",
+  "description": "Comprehensive EU Law MCP — EU treaties (TEU, TFEU, Charter), 30+ regulations, 20+ directives, 500 CJEU landmark cases, transposition tracking",
+  "repository": {
+    "url": "https://github.com/Ansvar-Systems/comprehensive-eu-law-mcp",
+    "source": "github"
+  },
+  "homepage": "https://ansvar.eu",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@ansvar/comprehensive-eu-law-mcp",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" }
+    }
+  ]
+}
