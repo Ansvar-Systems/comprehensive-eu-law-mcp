@@ -19,7 +19,7 @@ const SERVER_NAME = 'comprehensive-eu-law-mcp';
 const VERSION = '0.1.0';
 
 function createMCPServer() {
-  const resolvedPath = join(__dirname, '..', 'data', 'database.db');
+  const resolvedPath = join(__dirname, '..', '..', 'data', 'database.db');
   const db = new Database(resolvedPath, { readonly: true });
 
   const server = new Server(
