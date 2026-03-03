@@ -1,4 +1,5 @@
 export function validateCitation(db, input) {
+    const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get();
     const citation = input.citation.trim();
     // Try to parse as case number (e.g., "C-311/18")
     const caseMatch = citation.match(/^(C-\d+\/\d+|T-\d+\/\d+)/i);
@@ -15,6 +16,11 @@ export function validateCitation(db, input) {
                 ecli: caseRow?.ecli || null,
             },
             warnings: caseRow ? [] : [`Case ${caseNumber} not found in database.`],
+            _meta: {
+                disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+                data_source: 'Ansvar Comprehensive EU Law Database',
+                data_age: metadata?.value ?? 'unknown',
+            },
         };
     }
     // Try to parse as article citation (e.g., "Article 5(1) GDPR", "Art. 101 TFEU")
@@ -37,6 +43,11 @@ export function validateCitation(db, input) {
                 match: null,
                 formatted: null,
                 warnings: [`Act "${actName}" not found in database.`],
+                _meta: {
+                    disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+                    data_source: 'Ansvar Comprehensive EU Law Database',
+                    data_age: metadata?.value ?? 'unknown',
+                },
             };
         }
         // Find the article
@@ -64,6 +75,11 @@ export function validateCitation(db, input) {
                 celex: act.celex_number ? `Article ${articleNum}, ${act.celex_number}` : null,
             } : null,
             warnings,
+            _meta: {
+                disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+                data_source: 'Ansvar Comprehensive EU Law Database',
+                data_age: metadata?.value ?? 'unknown',
+            },
         };
     }
     return {
@@ -75,5 +91,10 @@ export function validateCitation(db, input) {
         warnings: [
             `Could not parse citation: "${citation}". Expected formats: "Article 5 GDPR", "Art. 101 TFEU", "C-311/18".`,
         ],
+        _meta: {
+            disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+            data_source: 'Ansvar Comprehensive EU Law Database',
+            data_age: metadata?.value ?? 'unknown',
+        },
     };
 }

@@ -1,4 +1,5 @@
 export function buildLegalStance(db, input) {
+    const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get();
     const limit = Math.min(input.limit ?? 5, 20);
     // Search articles
     const articles = db.prepare(`
@@ -33,6 +34,8 @@ export function buildLegalStance(db, input) {
         },
         _meta: {
             disclaimer: 'EU law data compiled from EUR-Lex and CJEU public sources. Case law summaries are editorial. Verify against official sources. Not legal advice.',
+            data_source: 'Ansvar Comprehensive EU Law Database',
+            data_age: metadata?.value ?? 'unknown',
         },
     };
 }

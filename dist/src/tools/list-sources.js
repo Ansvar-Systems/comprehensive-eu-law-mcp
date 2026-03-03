@@ -11,6 +11,7 @@ export function listSources(db) {
            (SELECT COUNT(*) FROM articles WHERE act_id = eu_acts.id) as article_count
     FROM eu_acts ORDER BY act_type, short_title
   `).all();
+    const buildDate = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get();
     return {
         acts_by_type: actsByType,
         totals: {
@@ -21,5 +22,10 @@ export function listSources(db) {
         },
         acts,
         metadata,
+        _meta: {
+            disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+            data_source: 'Ansvar Comprehensive EU Law Database',
+            data_age: buildDate?.value ?? 'unknown',
+        },
     };
 }

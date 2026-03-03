@@ -1,4 +1,5 @@
 export function getRegulatoryTechnicalStandard(db, input) {
+    const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get();
     // Find the parent regulation
     const parent = db.prepare(`
     SELECT * FROM eu_acts
@@ -27,6 +28,8 @@ export function getRegulatoryTechnicalStandard(db, input) {
         count: rts.length,
         _meta: {
             disclaimer: 'RTS/ITS data compiled from EUR-Lex. This may not include all delegated acts. Verify with EUR-Lex. Not legal advice.',
+            data_source: 'Ansvar Comprehensive EU Law Database',
+            data_age: metadata?.value ?? 'unknown',
         },
     };
 }

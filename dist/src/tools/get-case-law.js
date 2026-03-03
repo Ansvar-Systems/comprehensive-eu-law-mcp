@@ -1,4 +1,5 @@
 export function getCaseLaw(db, input) {
+    const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get();
     const caseRow = db.prepare(`
     SELECT * FROM case_law
     WHERE case_number = ? OR ecli = ? OR LOWER(case_number) = LOWER(?)
@@ -23,6 +24,8 @@ export function getCaseLaw(db, input) {
         },
         _meta: {
             disclaimer: 'Case law summaries are editorial. Verify full judgments on curia.europa.eu. Not legal advice.',
+            data_source: 'Ansvar Comprehensive EU Law Database',
+            data_age: metadata?.value ?? 'unknown',
         },
     };
 }

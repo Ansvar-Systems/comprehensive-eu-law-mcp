@@ -1,4 +1,5 @@
 export function searchCaseLaw(db, input) {
+    const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get();
     const limit = Math.min(input.limit ?? 10, 50);
     const minImportance = input.min_importance ?? 1;
     let sql = `
@@ -22,6 +23,8 @@ export function searchCaseLaw(db, input) {
         results,
         _meta: {
             disclaimer: 'Case law summaries are editorial. Verify full judgments on curia.europa.eu. Not legal advice.',
+            data_source: 'Ansvar Comprehensive EU Law Database',
+            data_age: metadata?.value ?? 'unknown',
         },
     };
 }

@@ -44,6 +44,8 @@ export function getCommissionProposal(db: Database.Database, input: GetProposalI
     proposals,
     _meta: {
       disclaimer: 'Proposal status data is editorial. Check EUR-Lex and the Legislative Observatory for current procedural status. Not legal advice.',
+      data_source: 'Ansvar Comprehensive EU Law Database',
+      data_age: metadata?.value ?? 'unknown',
     },
   };
 }

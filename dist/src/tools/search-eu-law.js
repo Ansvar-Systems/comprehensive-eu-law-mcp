@@ -1,5 +1,6 @@
 export function searchEuLaw(db, input) {
     const limit = Math.min(input.limit ?? 10, 50);
+    const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get();
     let sql = `
     SELECT a.id, a.article_number, a.title, a.content, a.part, a.chapter, a.section,
            ea.id as act_id, ea.short_title, ea.title as act_title, ea.act_type, ea.celex_number
@@ -26,6 +27,8 @@ export function searchEuLaw(db, input) {
         results,
         _meta: {
             disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+            data_source: 'Ansvar Comprehensive EU Law Database',
+            data_age: metadata?.value ?? 'unknown',
         },
     };
 }

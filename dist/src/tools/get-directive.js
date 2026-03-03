@@ -1,4 +1,5 @@
 export function getDirective(db, input) {
+    const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get();
     const act = db.prepare(`
     SELECT * FROM eu_acts
     WHERE (LOWER(short_title) = LOWER(?) OR LOWER(title) LIKE LOWER(?) OR LOWER(celex_number) = LOWER(?))
@@ -44,6 +45,8 @@ export function getDirective(db, input) {
         transposition_details: transposition,
         _meta: {
             disclaimer: 'EU law data compiled from EUR-Lex. Transposition data is editorial and may not reflect latest notifications. Verify with EUR-Lex. Not legal advice.',
+            data_source: 'Ansvar Comprehensive EU Law Database',
+            data_age: metadata?.value ?? 'unknown',
         },
     };
 }
