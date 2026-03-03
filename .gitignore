@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.freshness-*
+.ingest-*
+coverage/
+*.tgz
