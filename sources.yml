@@ -1,0 +1,100 @@
+schema_version: "1.0"
+mcp_name: "Comprehensive EU Law MCP"
+jurisdiction: "EU"
+deployment_strategy: "Strategy A (Vercel)"
+
+sources:
+  - name: "EU Treaties (TEU, TFEU)"
+    authority: "European Union"
+    official_portal: "https://eur-lex.europa.eu/collection/eu-law/treaties.html"
+    retrieval_method: "HTML_SCRAPE"
+    update_frequency: "on_change"
+    records_estimate: "~80 articles across TEU and TFEU"
+    priority: "critical"
+    coverage_note: "Selected key articles from the Treaty on European Union and the Treaty on the Functioning of the European Union"
+    license_or_terms:
+      type: "official_publication"
+      url: "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html"
+      summary: "EU law texts are public domain under the principle of free access to law. EUR-Lex terms apply for bulk replication."
+    languages:
+      - "en"
+
+  - name: "Charter of Fundamental Rights of the European Union"
+    authority: "European Union"
+    official_portal: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:12012P/TXT"
+    retrieval_method: "HTML_SCRAPE"
+    update_frequency: "on_change"
+    records_estimate: "~54 articles"
+    priority: "critical"
+    coverage_note: "Full charter text including all titles and articles"
+    license_or_terms:
+      type: "official_publication"
+      url: "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html"
+      summary: "EU law texts are public domain under the principle of free access to law."
+    languages:
+      - "en"
+
+  - name: "EU Regulations (GDPR, AI Act, DORA, DMA, DSA, Data Act, CRA, eIDAS 2.0)"
+    authority: "European Parliament and Council of the European Union"
+    official_portal: "https://eur-lex.europa.eu"
+    retrieval_method: "HTML_SCRAPE"
+    update_frequency: "on_change"
+    records_estimate: "8 regulations with key articles"
+    priority: "critical"
+    coverage_note: "Key articles from each regulation. Not full texts — selected provisions most relevant to cybersecurity and data protection."
+    license_or_terms:
+      type: "official_publication"
+      url: "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html"
+      summary: "EU regulations published in the Official Journal are freely available for reproduction."
+    languages:
+      - "en"
+
+  - name: "EU Directives (NIS2, PSD2, CER, ePrivacy, AI Liability, Product Liability)"
+    authority: "European Parliament and Council of the European Union"
+    official_portal: "https://eur-lex.europa.eu"
+    retrieval_method: "HTML_SCRAPE"
+    update_frequency: "on_change"
+    records_estimate: "6 directives with key articles"
+    priority: "high"
+    coverage_note: "Key articles from each directive with transposition status tracking for NIS2"
+    license_or_terms:
+      type: "official_publication"
+      url: "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html"
+      summary: "EU directives published in the Official Journal are freely available for reproduction."
+    languages:
+      - "en"
+
+  - name: "CJEU Case Law"
+    authority: "Court of Justice of the European Union"
+    official_portal: "https://curia.europa.eu"
+    retrieval_method: "MANUAL"
+    update_frequency: "on_change"
+    records_estimate: "13 landmark cases"
+    priority: "high"
+    coverage_note: "Key cases in data protection, digital rights, and competition law. Summaries are editorial — headnotes and ruling summaries, not full judgments."
+    license_or_terms:
+      type: "official_publication"
+      url: "https://curia.europa.eu/jcms/jcms/j_6/en/"
+      summary: "CJEU judgments are public documents. Summaries are editorial and not official translations."
+    languages:
+      - "en"
+
+  - name: "NIS2 Transposition Tracker"
+    authority: "Ansvar editorial (compiled from national sources)"
+    official_portal: "https://eur-lex.europa.eu"
+    retrieval_method: "MANUAL"
+    update_frequency: "quarterly"
+    records_estimate: "10 member state records"
+    priority: "medium"
+    coverage_note: "Transposition status for NIS2 across 10 EU member states. Editorial data — may not reflect latest notifications."
+    license_or_terms:
+      type: "editorial_compilation"
+      url: "https://eur-lex.europa.eu"
+      summary: "Compiled from publicly available national implementation data. Verify with EUR-Lex national transposition measures."
+    languages:
+      - "en"
+
+data_freshness:
+  automated_checks: true
+  check_frequency: "daily"
+  last_verified: "2026-02-28"

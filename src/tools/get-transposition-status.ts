@@ -6,6 +6,7 @@ interface GetTranspositionStatusInput {
 }
 
 export function getTranspositionStatus(db: Database.Database, input: GetTranspositionStatusInput) {
+  const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get() as any;
   const act = db.prepare(`
     SELECT * FROM eu_acts
     WHERE (LOWER(short_title) = LOWER(?) OR LOWER(title) LIKE LOWER(?))
@@ -45,6 +46,8 @@ export function getTranspositionStatus(db: Database.Database, input: GetTranspos
     results,
     _meta: {
       disclaimer: 'Transposition data is editorial and may not reflect latest notifications. Verify with EUR-Lex national transposition measures. Not legal advice.',
+      data_source: 'Ansvar Comprehensive EU Law Database',
+      data_age: metadata?.value ?? 'unknown',
     },
   };
 }

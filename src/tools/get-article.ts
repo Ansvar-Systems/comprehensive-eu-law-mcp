@@ -6,6 +6,7 @@ interface GetArticleInput {
 }
 
 export function getArticle(db: Database.Database, input: GetArticleInput) {
+  const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get() as any;
   // Find the act by short_title, title, or celex_number (case-insensitive)
   const act = db.prepare(`
     SELECT * FROM eu_acts
@@ -55,6 +56,8 @@ export function getArticle(db: Database.Database, input: GetArticleInput) {
     },
     _meta: {
       disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+      data_source: 'Ansvar Comprehensive EU Law Database',
+      data_age: metadata?.value ?? 'unknown',
     },
   };
 }

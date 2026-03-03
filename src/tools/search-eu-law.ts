@@ -9,6 +9,7 @@ interface SearchEuLawInput {
 
 export function searchEuLaw(db: Database.Database, input: SearchEuLawInput) {
   const limit = Math.min(input.limit ?? 10, 50);
+  const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get() as any;
 
   let sql = `
     SELECT a.id, a.article_number, a.title, a.content, a.part, a.chapter, a.section,
@@ -41,6 +42,8 @@ export function searchEuLaw(db: Database.Database, input: SearchEuLawInput) {
     results,
     _meta: {
       disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+      data_source: 'Ansvar Comprehensive EU Law Database',
+      data_age: metadata?.value ?? 'unknown',
     },
   };
 }

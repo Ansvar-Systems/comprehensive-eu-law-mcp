@@ -24,11 +24,11 @@ export function about(db: Database.Database) {
       total_articles: articleCount,
     },
     data_source: 'Ansvar Comprehensive EU Law Database (Phase 1)',
-    freshness: metadata['build_date'] || 'unknown',
+    data_age: metadata['build_date'] || 'unknown',
     _meta: {
       disclaimer: 'EU law data is compiled from EUR-Lex and CJEU public sources. Treaty texts and regulations are official EU documents. Case law summaries are editorial. Verify against EUR-Lex for binding text. Not legal advice.',
-      data_source: 'Ansvar Comprehensive EU Law Database (Phase 1)',
-      freshness: metadata['build_date'] || 'unknown',
+      data_source: 'Ansvar Comprehensive EU Law Database',
+      data_age: metadata['build_date'] || 'unknown',
     },
   };
 }

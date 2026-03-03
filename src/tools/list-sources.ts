@@ -17,6 +17,8 @@ export function listSources(db: Database.Database) {
     FROM eu_acts ORDER BY act_type, short_title
   `).all();
 
+  const buildDate = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get() as any;
+
   return {
     acts_by_type: actsByType,
     totals: {
@@ -27,5 +29,10 @@ export function listSources(db: Database.Database) {
     },
     acts,
     metadata,
+    _meta: {
+      disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+      data_source: 'Ansvar Comprehensive EU Law Database',
+      data_age: buildDate?.value ?? 'unknown',
+    },
   };
 }

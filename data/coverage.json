@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "mcp_name": "Comprehensive EU Law MCP",
+  "mcp_type": "domain_intelligence",
+  "coverage_date": "2026-02-28",
+  "database_version": "0.1.0",
+  "sources": [
+    {
+      "id": "EU_TREATIES",
+      "name": "EU Treaties (TEU, TFEU, Charter)",
+      "authority": "European Union",
+      "url": "https://eur-lex.europa.eu/collection/eu-law/treaties.html",
+      "version": "2026-02-28",
+      "item_count": 3,
+      "item_type": "treaty",
+      "last_refresh": "2026-02-28",
+      "refresh_frequency": "on_change",
+      "completeness": "partial",
+      "completeness_note": "Selected key articles from TEU, TFEU, and Charter of Fundamental Rights"
+    },
+    {
+      "id": "EU_REGULATIONS",
+      "name": "EU Regulations (GDPR, AI Act, DORA, DMA, DSA, Data Act, CRA, eIDAS 2.0)",
+      "authority": "European Parliament and Council of the EU",
+      "url": "https://eur-lex.europa.eu",
+      "version": "2026-02-28",
+      "item_count": 8,
+      "item_type": "regulation",
+      "last_refresh": "2026-02-28",
+      "refresh_frequency": "monthly",
+      "completeness": "partial",
+      "completeness_note": "Key articles from 8 regulations. Not full texts — selected provisions for cybersecurity and data protection."
+    },
+    {
+      "id": "EU_DIRECTIVES",
+      "name": "EU Directives (NIS2, PSD2, CER, ePrivacy, AI Liability, Product Liability)",
+      "authority": "European Parliament and Council of the EU",
+      "url": "https://eur-lex.europa.eu",
+      "version": "2026-02-28",
+      "item_count": 6,
+      "item_type": "directive",
+      "last_refresh": "2026-02-28",
+      "refresh_frequency": "monthly",
+      "completeness": "partial",
+      "completeness_note": "Key articles from 6 directives with NIS2 transposition tracking"
+    },
+    {
+      "id": "CJEU_CASE_LAW",
+      "name": "CJEU Landmark Cases",
+      "authority": "Court of Justice of the European Union",
+      "url": "https://curia.europa.eu",
+      "version": "2026-02-28",
+      "item_count": 13,
+      "item_type": "case",
+      "last_refresh": "2026-02-28",
+      "refresh_frequency": "on_change",
+      "completeness": "partial",
+      "completeness_note": "13 landmark cases in data protection, digital rights, and competition law. Summaries only — not full judgments."
+    }
+  ],
+  "gaps": [
+    {
+      "id": "partial-articles",
+      "description": "Regulations and directives include selected key articles, not complete texts",
+      "reason": "Full texts are lengthy; database focuses on provisions most relevant to cybersecurity and compliance",
+      "impact": "medium",
+      "planned": true,
+      "target_version": "0.2"
+    },
+    {
+      "id": "limited-case-law",
+      "description": "Only 13 landmark cases included, not comprehensive CJEU jurisprudence",
+      "reason": "CJEU database is large; initial version covers high-impact cases only",
+      "impact": "medium",
+      "planned": true,
+      "target_version": "0.2"
+    },
+    {
+      "id": "limited-transposition",
+      "description": "Transposition tracking covers 10 member states for NIS2 only",
+      "reason": "Transposition data is manually compiled from national sources",
+      "impact": "medium",
+      "planned": true,
+      "target_version": "0.2"
+    },
+    {
+      "id": "no-delegated-acts",
+      "description": "Delegated and implementing acts (RTS/ITS) data returns empty for most regulations",
+      "reason": "Delegated acts not yet seeded — requires legal_basis cross-referencing in eu_acts table",
+      "impact": "low",
+      "planned": true,
+      "target_version": "0.2"
+    },
+    {
+      "id": "case-law-summaries-only",
+      "description": "Case law entries are editorial summaries, not full judgment text",
+      "reason": "Full judgments are lengthy and require structured extraction from curia.europa.eu",
+      "impact": "low",
+      "planned": false,
+      "target_version": null
+    }
+  ],
+  "tools": [
+    { "name": "search_eu_law", "category": "search", "description": "FTS5 search across all EU law articles", "data_sources": ["EU_TREATIES", "EU_REGULATIONS", "EU_DIRECTIVES"], "verified": true },
+    { "name": "get_article", "category": "lookup", "description": "Get a specific article by act short title and article number", "data_sources": ["EU_TREATIES", "EU_REGULATIONS", "EU_DIRECTIVES"], "verified": true },
+    { "name": "get_regulation", "category": "lookup", "description": "Get regulation metadata with article count", "data_sources": ["EU_REGULATIONS"], "verified": true },
+    { "name": "get_directive", "category": "lookup", "description": "Get directive metadata with transposition status", "data_sources": ["EU_DIRECTIVES"], "verified": true },
+    { "name": "get_case_law", "category": "lookup", "description": "Get a CJEU case by case number or ECLI", "data_sources": ["CJEU_CASE_LAW"], "verified": true },
+    { "name": "search_case_law", "category": "search", "description": "Search CJEU cases by keyword with court and importance filtering", "data_sources": ["CJEU_CASE_LAW"], "verified": true },
+    { "name": "get_transposition_status", "category": "lookup", "description": "Check directive transposition by member state", "data_sources": ["EU_DIRECTIVES"], "verified": true },
+    { "name": "get_regulatory_technical_standard", "category": "lookup", "description": "Get delegated/implementing acts under a parent regulation", "data_sources": ["EU_REGULATIONS"], "verified": true },
+    { "name": "get_commission_proposal", "category": "lookup", "description": "Reference pending legislative proposals", "data_sources": ["EU_REGULATIONS", "EU_DIRECTIVES"], "verified": true },
+    { "name": "build_legal_stance", "category": "analysis", "description": "Aggregate provisions and case law for a legal question", "data_sources": ["EU_TREATIES", "EU_REGULATIONS", "EU_DIRECTIVES", "CJEU_CASE_LAW"], "verified": true },
+    { "name": "validate_citation", "category": "meta", "description": "Validate an EU law citation against the database", "data_sources": ["EU_TREATIES", "EU_REGULATIONS", "EU_DIRECTIVES", "CJEU_CASE_LAW"], "verified": true },
+    { "name": "list_sources", "category": "meta", "description": "List all sources with provenance and record counts", "data_sources": ["EU_TREATIES", "EU_REGULATIONS", "EU_DIRECTIVES", "CJEU_CASE_LAW"], "verified": true },
+    { "name": "about", "category": "meta", "description": "Server metadata, data coverage, and disclaimer", "data_sources": [], "verified": true },
+    { "name": "check_data_freshness", "category": "meta", "description": "Check database build date, schema version, and record counts", "data_sources": ["EU_TREATIES", "EU_REGULATIONS", "EU_DIRECTIVES", "CJEU_CASE_LAW"], "verified": true }
+  ],
+  "summary": {
+    "total_tools": 14,
+    "total_sources": 4,
+    "total_items": 275,
+    "db_size_kb": 312,
+    "known_gaps": 5,
+    "gaps_planned": 3
+  }
+}

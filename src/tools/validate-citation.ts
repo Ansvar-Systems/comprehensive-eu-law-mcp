@@ -5,6 +5,7 @@ interface ValidateCitationInput {
 }
 
 export function validateCitation(db: Database.Database, input: ValidateCitationInput) {
+  const metadata = db.prepare("SELECT value FROM db_metadata WHERE key = 'build_date'").get() as any;
   const citation = input.citation.trim();
 
   // Try to parse as case number (e.g., "C-311/18")
@@ -25,6 +26,11 @@ export function validateCitation(db: Database.Database, input: ValidateCitationI
         ecli: caseRow?.ecli || null,
       },
       warnings: caseRow ? [] : [`Case ${caseNumber} not found in database.`],
+      _meta: {
+        disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+        data_source: 'Ansvar Comprehensive EU Law Database',
+        data_age: metadata?.value ?? 'unknown',
+      },
     };
   }
 
@@ -50,6 +56,11 @@ export function validateCitation(db: Database.Database, input: ValidateCitationI
         match: null,
         formatted: null,
         warnings: [`Act "${actName}" not found in database.`],
+        _meta: {
+          disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+          data_source: 'Ansvar Comprehensive EU Law Database',
+          data_age: metadata?.value ?? 'unknown',
+        },
       };
     }
 
@@ -80,6 +91,11 @@ export function validateCitation(db: Database.Database, input: ValidateCitationI
         celex: act.celex_number ? `Article ${articleNum}, ${act.celex_number}` : null,
       } : null,
       warnings,
+      _meta: {
+        disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+        data_source: 'Ansvar Comprehensive EU Law Database',
+        data_age: metadata?.value ?? 'unknown',
+      },
     };
   }
 
@@ -92,5 +108,10 @@ export function validateCitation(db: Database.Database, input: ValidateCitationI
     warnings: [
       `Could not parse citation: "${citation}". Expected formats: "Article 5 GDPR", "Art. 101 TFEU", "C-311/18".`,
     ],
+    _meta: {
+      disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+      data_source: 'Ansvar Comprehensive EU Law Database',
+      data_age: metadata?.value ?? 'unknown',
+    },
   };
 }

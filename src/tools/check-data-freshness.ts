@@ -25,6 +25,8 @@ export function checkDataFreshness(db: Database.Database) {
     },
     _meta: {
       disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
+      data_source: 'Ansvar Comprehensive EU Law Database',
+      data_age: metadata['build_date'] ?? 'unknown',
     },
   };
 }
