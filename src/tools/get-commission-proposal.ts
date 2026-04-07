@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { buildCitation } from '../citation.js';
 
 interface GetProposalInput {
   identifier: string;
@@ -38,7 +39,16 @@ export function getCommissionProposal(db: Database.Database, input: GetProposalI
   return {
     query: input.identifier,
     count: proposals.length,
-    proposals,
+    proposals: (proposals as any[]).map((p) => ({
+      ...p,
+      _citation: buildCitation(
+        p.short_title || p.celex_number || input.identifier,
+        p.short_title || p.title,
+        'get_commission_proposal',
+        { identifier: input.identifier },
+        p.url,
+      ),
+    })),
     _meta: {
       disclaimer: 'Proposal status data is editorial. Check EUR-Lex and the Legislative Observatory for current procedural status. Not legal advice.',
     },

@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { buildCitation } from '../citation.js';
 
 interface GetDirectiveInput {
   identifier: string;
@@ -57,6 +58,14 @@ export function getDirective(db: Database.Database, input: GetDirectiveInput) {
     article_count: articleCount,
     transposition_summary: transpositionSummary,
     transposition_details: transposition,
+    _citation: buildCitation(
+      act.short_title || act.celex_number,
+      act.short_title || act.title,
+      'get_directive',
+      { identifier: input.identifier },
+      act.url,
+      [act.celex_number, act.title].filter(Boolean),
+    ),
     _meta: {
       disclaimer: 'EU law data compiled from EUR-Lex. Transposition data is editorial and may not reflect latest notifications. Verify with EUR-Lex. Not legal advice.',
     },

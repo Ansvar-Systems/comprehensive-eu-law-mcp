@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { buildCitation } from '../citation.js';
 
 interface BuildLegalStanceInput {
   query: string;
@@ -31,15 +32,37 @@ export function buildLegalStance(db: Database.Database, input: BuildLegalStanceI
     LIMIT ?
   `).all(input.query, limit);
 
+  const citedArticles = (articles as any[]).map((a) => ({
+    ...a,
+    _citation: buildCitation(
+      `${a.short_title || a.celex_number} Article ${a.article_number}`,
+      `Article ${a.article_number} ${a.short_title || a.act_title}`,
+      'get_article',
+      { act: a.short_title || a.celex_number, article: a.article_number },
+    ),
+  }));
+
+  const citedCases = (cases as any[]).map((c) => ({
+    ...c,
+    _citation: buildCitation(
+      c.case_number,
+      `Case ${c.case_number} ${c.case_name || ''}`.trim(),
+      'get_case_law',
+      { case_number: c.case_number },
+      undefined,
+      c.ecli ? [c.ecli] : undefined,
+    ),
+  }));
+
   return {
     query: input.query,
     legislation: {
-      count: articles.length,
-      provisions: articles,
+      count: citedArticles.length,
+      provisions: citedArticles,
     },
     case_law: {
-      count: cases.length,
-      cases,
+      count: citedCases.length,
+      cases: citedCases,
     },
     _meta: {
       disclaimer: 'EU law data compiled from EUR-Lex and CJEU public sources. Case law summaries are editorial. Verify against official sources. Not legal advice.',

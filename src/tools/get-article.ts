@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { buildCitation } from '../citation.js';
 
 interface GetArticleInput {
   act: string;
@@ -53,6 +54,14 @@ export function getArticle(db: Database.Database, input: GetArticleInput) {
       chapter: article.chapter,
       section: article.section,
     },
+    _citation: buildCitation(
+      `${act.short_title || act.celex_number} Article ${article.article_number}`,
+      `Article ${article.article_number} ${act.short_title || act.title}`,
+      'get_article',
+      { act: input.act, article: input.article },
+      act.url,
+      act.short_title ? [act.celex_number, act.title].filter(Boolean) : undefined,
+    ),
     _meta: {
       disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
     },

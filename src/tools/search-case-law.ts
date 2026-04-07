@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { buildCitation } from '../citation.js';
 
 interface SearchCaseLawInput {
   query: string;
@@ -28,7 +29,19 @@ export function searchCaseLaw(db: Database.Database, input: SearchCaseLawInput) 
   sql += ` ORDER BY rank LIMIT ?`;
   params.push(limit);
 
-  const results = db.prepare(sql).all(...params);
+  const rows = db.prepare(sql).all(...params) as any[];
+
+  const results = rows.map((r) => ({
+    ...r,
+    _citation: buildCitation(
+      r.case_number,
+      `Case ${r.case_number} ${r.case_name || ''}`.trim(),
+      'get_case_law',
+      { case_number: r.case_number },
+      undefined,
+      r.ecli ? [r.ecli] : undefined,
+    ),
+  }));
 
   return {
     query: input.query,

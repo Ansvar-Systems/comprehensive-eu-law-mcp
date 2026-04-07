@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { buildCitation } from '../citation.js';
 
 interface GetTranspositionStatusInput {
   directive: string;
@@ -43,6 +44,12 @@ export function getTranspositionStatus(db: Database.Database, input: GetTranspos
     member_state_filter: input.member_state || 'all',
     count: results.length,
     results,
+    _citation: buildCitation(
+      `${act.short_title || act.celex_number} transposition`,
+      `Transposition status: ${act.short_title || act.title}`,
+      'get_transposition_status',
+      { directive: input.directive, ...(input.member_state ? { member_state: input.member_state } : {}) },
+    ),
     _meta: {
       disclaimer: 'Transposition data is editorial and may not reflect latest notifications. Verify with EUR-Lex national transposition measures. Not legal advice.',
     },
