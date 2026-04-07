@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { buildCitation } from '../citation.js';
 
 interface SearchEuLawInput {
   query: string;
@@ -33,7 +34,17 @@ export function searchEuLaw(db: Database.Database, input: SearchEuLawInput) {
   sql += ` ORDER BY rank LIMIT ?`;
   params.push(limit);
 
-  const results = db.prepare(sql).all(...params);
+  const rows = db.prepare(sql).all(...params) as any[];
+
+  const results = rows.map((r) => ({
+    ...r,
+    _citation: buildCitation(
+      `${r.short_title || r.celex_number} Article ${r.article_number}`,
+      `Article ${r.article_number} ${r.short_title || r.act_title}`,
+      'get_article',
+      { act: r.short_title || r.celex_number, article: r.article_number },
+    ),
+  }));
 
   return {
     query: input.query,

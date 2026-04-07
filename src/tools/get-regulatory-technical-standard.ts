@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { buildCitation } from '../citation.js';
 
 interface GetRTSInput {
   parent_regulation: string;
@@ -34,6 +35,12 @@ export function getRegulatoryTechnicalStandard(db: Database.Database, input: Get
     },
     delegated_and_implementing_acts: rts,
     count: rts.length,
+    _citation: buildCitation(
+      `${parent.short_title || parent.celex_number} RTS/ITS`,
+      `Delegated acts under ${parent.short_title || parent.title}`,
+      'get_regulatory_technical_standard',
+      { parent_regulation: input.parent_regulation },
+    ),
     _meta: {
       disclaimer: 'RTS/ITS data compiled from EUR-Lex. This may not include all delegated acts. Verify with EUR-Lex. Not legal advice.',
     },

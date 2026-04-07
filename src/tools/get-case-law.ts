@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { buildCitation } from '../citation.js';
 
 interface GetCaseLawInput {
   case_number: string;
@@ -31,6 +32,14 @@ export function getCaseLaw(db: Database.Database, input: GetCaseLawInput) {
       cited_acts: caseRow.cited_acts,
       importance_score: caseRow.importance_score,
     },
+    _citation: buildCitation(
+      caseRow.case_number,
+      `Case ${caseRow.case_number} ${caseRow.case_name || ''}`.trim(),
+      'get_case_law',
+      { case_number: input.case_number },
+      undefined,
+      caseRow.ecli ? [caseRow.ecli] : undefined,
+    ),
     _meta: {
       disclaimer: 'Case law summaries are editorial. Verify full judgments on curia.europa.eu. Not legal advice.',
     },

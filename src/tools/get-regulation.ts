@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { buildCitation } from '../citation.js';
 
 interface GetRegulationInput {
   identifier: string;
@@ -46,6 +47,14 @@ export function getRegulation(db: Database.Database, input: GetRegulationInput) 
     },
     article_count: articleCount,
     articles: keyArticles,
+    _citation: buildCitation(
+      act.short_title || act.celex_number,
+      act.short_title || act.title,
+      'get_regulation',
+      { identifier: input.identifier },
+      act.url,
+      [act.celex_number, act.title].filter(Boolean),
+    ),
     _meta: {
       disclaimer: 'EU law data compiled from EUR-Lex. Verify against EUR-Lex for binding text. Not legal advice.',
     },
