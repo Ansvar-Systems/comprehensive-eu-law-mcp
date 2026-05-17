@@ -1,5 +1,52 @@
 # Comprehensive EU Law MCP Server
 
+<!-- ANSVAR-CTA-BEGIN -->
+> ### ▶ Try this MCP instantly via Ansvar Gateway
+> **50 free queries/day · no card required · OAuth signup at [ansvar.eu/gateway](https://ansvar.eu/gateway)**
+>
+> One endpoint, one OAuth signup, access from any MCP-compatible client.
+
+### Connect
+
+**Claude Code** (one line):
+
+```bash
+claude mcp add ansvar --transport http https://gateway.ansvar.eu/mcp
+```
+
+**Claude Desktop / Cursor** — add to `claude_desktop_config.json` (or `mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "ansvar": {
+      "type": "url",
+      "url": "https://gateway.ansvar.eu/mcp"
+    }
+  }
+}
+```
+
+**Claude.ai** — Settings → Connectors → Add custom connector → paste `https://gateway.ansvar.eu/mcp`
+
+First request opens an OAuth flow at [ansvar.eu/gateway](https://ansvar.eu/gateway). After signup, your client is bound to your account; tier (free / premium / team / company) determines fan-out, quota, and which downstream MCPs are reachable.
+
+---
+
+## Self-host this MCP
+
+You can also clone this repo and build the corpus yourself. The schema,
+fetcher, and tool implementations all live here. What is not in the repo is
+the pre-built database — TDM and standards-licensing constraints on the
+upstream sources mean we host the corpus on Ansvar infrastructure rather
+than redistribute it as a public artifact.
+
+Build your own: run this repo's ingestion script (entry-point varies per
+repo — typically `scripts/ingest.sh`, `npm run ingest`, or `make ingest`;
+check the repo root).
+<!-- ANSVAR-CTA-END -->
+
+
 MCP server providing structured access to EU treaties, regulations, directives, and CJEU case law through the [Model Context Protocol](https://modelcontextprotocol.io).
 
 Covers the TEU, TFEU, Charter of Fundamental Rights, 30+ key regulations (GDPR, AI Act, DORA, DMA, DSA, MiCA, etc.), 20+ key directives (NIS 2, CSRD, PSD2, etc.), and landmark CJEU cases. All data sourced from EUR-Lex and CJEU public databases.
@@ -10,29 +57,7 @@ Covers the TEU, TFEU, Charter of Fundamental Rights, 30+ key regulations (GDPR, 
 
 Connect directly to the hosted instance:
 
-```json
-{
-  "mcpServers": {
-    "comprehensive-eu-law": {
-      "type": "url",
-      "url": "https://mcp.ansvar.eu/comprehensive-eu-law-mcp/mcp"
-    }
-  }
-}
-```
-
 ### Local (npx — runs on your machine)
-
-```json
-{
-  "mcpServers": {
-    "comprehensive-eu-law": {
-      "command": "npx",
-      "args": ["-y", "@ansvar/comprehensive-eu-law-mcp"]
-    }
-  }
-}
-```
 
 Requires Node.js 18+.
 
@@ -178,4 +203,3 @@ Apache License 2.0. See [LICENSE](LICENSE).
 
 ---
 
-Built by [Ansvar Systems](https://ansvar.eu) as part of the [Ansvar MCP fleet](https://mcp.ansvar.eu).
